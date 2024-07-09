@@ -14,11 +14,15 @@
             margin: 0;
             background-color: #f0f0f0;
         }
+        .container {
+            text-align: center;
+        }
         .flashcard {
             width: 300px;
             height: 200px;
             perspective: 1000px;
             cursor: pointer;
+            margin: 0 auto 20px;
         }
         .flashcard-inner {
             position: relative;
@@ -52,8 +56,15 @@
             color: white;
             transform: rotateY(180deg);
         }
+        .card-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
         button {
-            margin-top: 20px;
+            margin: 10px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
@@ -61,18 +72,26 @@
     </style>
 </head>
 <body>
-    <div>
+    <div class="container">
         <div class="flashcard">
             <div class="flashcard-inner">
                 <div class="flashcard-front">
+                    <span class="card-number" id="cardNumber"></span>
                     <p id="question"></p>
                 </div>
                 <div class="flashcard-back">
+                    <span class="card-number" id="cardNumberBack"></span>
                     <p id="answer"></p>
                 </div>
             </div>
         </div>
-        <button onclick="nextCard()">Next Card</button>
+        <div>
+            <button onclick="previousCard()">Previous</button>
+            <button onclick="nextCard()">Next</button>
+        </div>
+        <div>
+            <button onclick="toggleRandomize()">Toggle Randomize</button>
+        </div>
     </div>
 
     <script>
@@ -95,14 +114,41 @@
         ];
 
         let currentCard = 0;
+        let isRandomized = false;
+        let randomizedIndices = [];
 
         function displayCard() {
-            document.getElementById('question').textContent = flashcards[currentCard].q;
-            document.getElementById('answer').textContent = flashcards[currentCard].a;
+            const index = isRandomized ? randomizedIndices[currentCard] : currentCard;
+            document.getElementById('question').textContent = flashcards[index].q;
+            document.getElementById('answer').textContent = flashcards[index].a;
+            document.getElementById('cardNumber').textContent = `${currentCard + 1}/${flashcards.length}`;
+            document.getElementById('cardNumberBack').textContent = `${currentCard + 1}/${flashcards.length}`;
         }
 
         function nextCard() {
             currentCard = (currentCard + 1) % flashcards.length;
+            displayCard();
+        }
+
+        function previousCard() {
+            currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+            displayCard();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function toggleRandomize() {
+            isRandomized = !isRandomized;
+            if (isRandomized) {
+                randomizedIndices = Array.from(Array(flashcards.length).keys());
+                shuffleArray(randomizedIndices);
+            }
+            currentCard = 0;
             displayCard();
         }
 
