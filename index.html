@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EnviReview-Navigation</title>
+    <title>EnviReview Flashcards</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,29 +17,137 @@
         .container {
             text-align: center;
         }
-        a {
-            display: block;
+        .flashcard {
+            width: 300px;
+            height: 200px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto 20px;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard:hover .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            border-radius: 10px;
+        }
+        .flashcard-front {
+            background-color: #3498db;
+            color: white;
+        }
+        .flashcard-back {
+            background-color: #2ecc71;
+            color: white;
+            transform: rotateY(180deg);
+        }
+        .card-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        button {
             margin: 10px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
-            text-decoration: none;
-            color: white;
-            background-color: #3498db;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        a:hover {
-            background-color: #2980b9;
         }
     </style>
 </head>
 <body>
-   <div class="container">
-       <a href="airpollution.html">Air Pollution</a>
-       <a href="waterpollution.html">Water Pollution</a>
-       <a href="soilpollution.html">Soil Pollution</a>
-       <a href="solidwaste.html">Solid Waste</a>
-   </div>
+    <div class="container">
+        <div class="flashcard">
+            <div class="flashcard-inner">
+                <div class="flashcard-front">
+                    <span class="card-number" id="cardNumber"></span>
+                    <p id="question"></p>
+                </div>
+                <div class="flashcard-back">
+                    <span class="card-number" id="cardNumberBack"></span>
+                    <p id="answer"></p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button onclick="previousCard()">Previous</button>
+            <button onclick="nextCard()">Next</button>
+        </div>
+        <div>
+            <button onclick="toggleRandomize()">Toggle Randomize</button>
+        </div>
+    </div>
+
+    <script>
+        let flashcards = [];
+        let currentCard = 0;
+        let isRandomized = false;
+        let randomizedIndices = [];
+
+        // Get the topic from the URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const topic = urlParams.get('topic');
+
+        // Fetch the JSON file based on the topic
+        fetch(`${topic}.json`)
+            .then(response => response.json())
+            .then(data => {
+                flashcards = data;
+                displayCard();
+            })
+            .catch(error => console.error('Error loading flashcards:', error));
+
+        function displayCard() {
+            if (flashcards.length === 0) return;
+            const index = isRandomized ? randomizedIndices[currentCard] : currentCard;
+            document.getElementById('question').textContent = flashcards[index].q;
+            document.getElementById('answer').textContent = flashcards[index].a;
+            document.getElementById('cardNumber').textContent = `${currentCard + 1}/${flashcards.length}`;
+            document.getElementById('cardNumberBack').textContent = `${currentCard + 1}/${flashcards.length}`;
+        }
+
+        function nextCard() {
+            currentCard = (currentCard + 1) % flashcards.length;
+            displayCard();
+        }
+
+        function previousCard() {
+            currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+            displayCard();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function toggleRandomize() {
+            isRandomized = !isRandomized;
+            if (isRandomized) {
+                randomizedIndices = Array.from(Array(flashcards.length).keys());
+                shuffleArray(randomizedIndices);
+            }
+            currentCard = 0;
+            displayCard();
+        }
+    </script>
 </body>
 </html>
