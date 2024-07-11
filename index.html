@@ -7,20 +7,28 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            padding: 20px;
             background-color: #f0f0f0;
         }
         .container {
-            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .module {
+            background-color: white;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         a {
             display: block;
-            margin: 10px;
-            padding: 10px 20px;
+            margin: 10px 0;
+            padding: 10px 15px;
             font-size: 16px;
             cursor: pointer;
             text-decoration: none;
@@ -36,10 +44,39 @@
 </head>
 <body>
    <div class="container">
-       <a href="flashcards.html?topic=airpollution">Air Pollution</a>
-       <a href="flashcards.html?topic=waterpollution">Water Pollution</a>
-       <a href="flashcards.html?topic=soilpollution">Soil Pollution</a>
-       <a href="flashcards.html?topic=solidwaste">Solid Waste</a>
+       <h1>EnviReview Flashcards</h1>
+       
+       <div class="module">
+           <h2>Module 1: Science refresher</h2>
+           <a href="flashcards.html?topic=science_and_the_scientific_method">Science & The Scientific Method</a>
+           <a href="flashcards.html?topic=environmental_measurement_systems">Environmental measurement systems</a>
+       </div>
+       
+       <div class="module">
+           <h2>Module 2: Why study the environment</h2>
+           <a href="flashcards.html?topic=introduction_to_environmental_science">Introduction to Environmental Science</a>
+       </div>
+       
+       <div class="module">
+           <h2>Module 3: The natural world</h2>
+           <a href="flashcards.html?topic=the_way_the_natural_world_works">The way the natural world works</a>
+           <a href="flashcards.html?topic=biogeochemical_cycles">Biogeochemical cycles</a>
+       </div>
+       
+       <div class="module">
+           <h2>Module 4: World's resources</h2>
+           <a href="flashcards.html?topic=philippine_biodiversity">Philippine Biodiversity</a>
+           <a href="flashcards.html?topic=understanding_population">Understanding population</a>
+           <a href="flashcards.html?topic=energy">Energy</a>
+       </div>
+       
+       <div class="module">
+           <h2>Module 5: Human impact on the environment</h2>
+           <a href="flashcards.html?topic=air_pollution">Air Pollution</a>
+           <a href="flashcards.html?topic=water">Water</a>
+           <a href="flashcards.html?topic=soil">Soil</a>
+           <a href="flashcards.html?topic=waste_and_its_management">Waste and its management</a>
+       </div>
    </div>
 </body>
 </html>
